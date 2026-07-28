@@ -4,9 +4,9 @@ import Link from "next/link";
 
 const LANGUAGE_PREFERENCE_KEY = "jm-language-preference";
 
-export function LanguageSwitcher({ lang, pathname, labels }) {
-  const frPath = pathname.startsWith("/en") ? pathname.replace("/en", "") || "/" : pathname;
-  const enPath = pathname.startsWith("/en") ? pathname : pathname === "/" ? "/en" : `/en${pathname}`;
+export function LanguageSwitcher({ lang, labels, localizedPaths }) {
+  const frPath = localizedPaths?.fr || "/";
+  const enPath = localizedPaths?.en || "/en";
 
   const rememberLanguageChoice = (nextLang) => {
     window.localStorage.setItem(LANGUAGE_PREFERENCE_KEY, nextLang);

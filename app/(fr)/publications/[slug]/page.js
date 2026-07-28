@@ -28,5 +28,7 @@ export default async function PublicationArticleRoute({ params }) {
     notFound();
   }
 
-  return <PublicationArticlePage lang="fr" article={article} />;
+  const counterpart = await getPublicationByTranslationKey("en", article.translationKey);
+
+  return <PublicationArticlePage lang="fr" article={article} counterpart={counterpart} />;
 }

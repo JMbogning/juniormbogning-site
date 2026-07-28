@@ -5,6 +5,7 @@ import { siteContent } from "../data/site-content";
 import { GiscusComments } from "./giscus-comments";
 import { LanguageSwitcher } from "./language-switcher";
 import { buildArticleJsonLd, buildPersonJsonLd, buildWebsiteJsonLd } from "../lib/seo";
+import { getLocalizedPath } from "../lib/seo";
 
 function pageKeyFromPath(pathname) {
   if (pathname === "/" || pathname === "/en") return "home";
@@ -14,7 +15,7 @@ function pageKeyFromPath(pathname) {
   return "home";
 }
 
-function Header({ lang, pathname, content }) {
+function Header({ lang, pathname, content, localizedPaths }) {
   const current = pageKeyFromPath(pathname);
   const contactAnchor = lang === "fr" ? "/#contact" : "/en#contact";
 
@@ -32,7 +33,7 @@ function Header({ lang, pathname, content }) {
           ))}
         </nav>
         <div className="site-header__actions">
-          <LanguageSwitcher lang={lang} pathname={pathname} labels={content.switcher} />
+          <LanguageSwitcher lang={lang} labels={content.switcher} localizedPaths={localizedPaths} />
           <Link className="header-cta" href={contactAnchor}>
             <span className="header-cta__plus">+</span>
             <span className="header-cta__label">{content.cta}</span>
@@ -53,12 +54,19 @@ function Footer({ content }) {
   );
 }
 
-function Shell({ lang, pathname, children }) {
+function buildLocalizedPaths(pageKey) {
+  return {
+    fr: getLocalizedPath("fr", pageKey),
+    en: getLocalizedPath("en", pageKey)
+  };
+}
+
+function Shell({ lang, pathname, localizedPaths, children }) {
   const content = siteContent[lang];
 
   return (
     <>
-      <Header lang={lang} pathname={pathname} content={content} />
+      <Header lang={lang} pathname={pathname} content={content} localizedPaths={localizedPaths} />
       <main>{children}</main>
       <Footer content={content} />
     </>
@@ -216,11 +224,12 @@ function HomeContactSection({ content }) {
 export function HomePage({ lang }) {
   const content = siteContent[lang];
   const pathname = lang === "fr" ? "/" : "/en";
+  const localizedPaths = buildLocalizedPaths("home");
   const personJsonLd = buildPersonJsonLd(lang);
   const websiteJsonLd = buildWebsiteJsonLd(lang);
 
   return (
-    <Shell lang={lang} pathname={pathname}>
+    <Shell lang={lang} pathname={pathname} localizedPaths={localizedPaths}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
       <HomeHero content={content} />
@@ -233,8 +242,10 @@ export function HomePage({ lang }) {
 export function PublicationsPage({ lang, publications }) {
   const content = { ...siteContent[lang], publications };
   const pathname = lang === "fr" ? "/publications" : "/en/publications";
+  const localizedPaths = buildLocalizedPaths("publications");
+
   return (
-    <Shell lang={lang} pathname={pathname}>
+    <Shell lang={lang} pathname={pathname} localizedPaths={localizedPaths}>
       <PageHero title={content.publicationsTitle} intro={content.publicationsIntro} />
       <PublicationsGrid content={content} />
     </Shell>
@@ -244,23 +255,28 @@ export function PublicationsPage({ lang, publications }) {
 export function ProjectsPage({ lang }) {
   const content = siteContent[lang];
   const pathname = lang === "fr" ? "/projets" : "/en/projects";
+  const localizedPaths = buildLocalizedPaths("projects");
 
   return (
-    <Shell lang={lang} pathname={pathname}>
+    <Shell lang={lang} pathname={pathname} localizedPaths={localizedPaths}>
       <PageHero title={content.projectsTitle} intro={content.projectsIntro} />
       <ProjectsIntro content={content} />
     </Shell>
   );
 }
 
-export function PublicationArticlePage({ lang, article }) {
+export function PublicationArticlePage({ lang, article, counterpart }) {
   const content = siteContent[lang];
   const pathname = article.href;
   const backHref = lang === "fr" ? "/publications" : "/en/publications";
+  const localizedPaths = {
+    fr: lang === "fr" ? article.href : counterpart?.href || "/publications",
+    en: lang === "en" ? article.href : counterpart?.href || "/en/publications"
+  };
   const articleJsonLd = buildArticleJsonLd(lang, article);
 
   return (
-    <Shell lang={lang} pathname={pathname}>
+    <Shell lang={lang} pathname={pathname} localizedPaths={localizedPaths}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <section className="page-hero page-hero--article" data-animate="hero">
         <div className="container article-hero-shell">
@@ -314,8 +330,10 @@ export function PublicationArticlePage({ lang, article }) {
 export function ContactPage({ lang }) {
   const content = siteContent[lang];
   const pathname = lang === "fr" ? "/contact" : "/en/contact";
+  const localizedPaths = buildLocalizedPaths("contact");
+
   return (
-    <Shell lang={lang} pathname={pathname}>
+    <Shell lang={lang} pathname={pathname} localizedPaths={localizedPaths}>
       <PageHero title={content.contactTitle} intro={content.contactIntro} />
       <ContactLayout content={content} />
     </Shell>

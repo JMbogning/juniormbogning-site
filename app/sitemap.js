@@ -8,6 +8,8 @@ export default async function sitemap() {
     getPublicationIndex("fr"),
     getPublicationIndex("en")
   ]);
+  const enPublicationsByTranslationKey = new Map(enPublications.map((article) => [article.translationKey, article]));
+  const frPublicationsByTranslationKey = new Map(frPublications.map((article) => [article.translationKey, article]));
 
   const staticEntries = [
     {
@@ -92,10 +94,35 @@ export default async function sitemap() {
     }
   ];
 
-  const publicationEntries = [...frPublications, ...enPublications].map((article) => ({
-    url: absoluteUrl(article.href),
-    lastModified: article.publishedAt
-  }));
+  const frPublicationEntries = frPublications.map((article) => {
+    const counterpart = enPublicationsByTranslationKey.get(article.translationKey);
 
-  return [...staticEntries, ...publicationEntries];
+    return {
+      url: absoluteUrl(article.href),
+      lastModified: article.publishedAt,
+      alternates: {
+        languages: {
+          "fr-FR": absoluteUrl(article.href),
+          "en-US": absoluteUrl(counterpart?.href || "/en/publications")
+        }
+      }
+    };
+  });
+
+  const enPublicationEntries = enPublications.map((article) => {
+    const counterpart = frPublicationsByTranslationKey.get(article.translationKey);
+
+    return {
+      url: absoluteUrl(article.href),
+      lastModified: article.publishedAt,
+      alternates: {
+        languages: {
+          "fr-FR": absoluteUrl(counterpart?.href || "/publications"),
+          "en-US": absoluteUrl(article.href)
+        }
+      }
+    };
+  });
+
+  return [...staticEntries, ...frPublicationEntries, ...enPublicationEntries];
 }
