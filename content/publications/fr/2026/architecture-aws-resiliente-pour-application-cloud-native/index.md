@@ -31,7 +31,7 @@ Dans cette logique, il faut surtout veiller à :
 
 - distribuer les services applicatifs sur plusieurs AZ ;
 - éviter les points uniques de défaillance ;
-- surveiller les mecanismes de bascule ;
+- surveiller les mécanismes de bascule ;
 - tester régulièrement les scénarios de reprise.
 
 ## Tirer parti du CDN et des couches d'entrée

@@ -4,7 +4,7 @@ import { buildPageMetadata } from "../../../lib/seo";
 export const metadata = buildPageMetadata({
   lang: "en",
   pageKey: "home",
-  title: "PhD candidate and DevSecOps engineer",
+  title: "Cloud Platform / DevSecOps Engineer",
   description:
     "Junior Mbogning shares his profile, projects and articles focused on Cloud, Kubernetes, DevSecOps and secure platform engineering."
 });
