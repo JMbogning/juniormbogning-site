@@ -6,7 +6,7 @@ export const siteContent = {
       { href: "/", label: "Accueil", key: "home" },
       { href: "/projets", label: "Projets", key: "projects" },
       { href: "/publications", label: "Articles", key: "publications" },
-      { href: "/contact", label: "Contact", key: "contact" }
+      // { href: "/contact", label: "Contact", key: "contact" }
     ],
     switcher: { fr: "FR", en: "EN" },
     cta: "Contact",
@@ -106,7 +106,7 @@ export const siteContent = {
       { href: "/en", label: "Welcome", key: "home" },
       { href: "/en/projects", label: "Projects", key: "projects" },
       { href: "/en/publications", label: "Articles", key: "publications" },
-      { href: "/en/contact", label: "Contact", key: "contact" }
+      // { href: "/en/contact", label: "Contact", key: "contact" }
     ],
     switcher: { fr: "FR", en: "EN" },
     cta: "Contact",

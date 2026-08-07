@@ -17,7 +17,6 @@ function pageKeyFromPath(pathname) {
 
 function Header({ lang, pathname, content, localizedPaths }) {
   const current = pageKeyFromPath(pathname);
-  const contactAnchor = lang === "fr" ? "/#contact" : "/en#contact";
 
   return (
     <header className="site-header">
@@ -34,10 +33,10 @@ function Header({ lang, pathname, content, localizedPaths }) {
         </nav>
         <div className="site-header__actions">
           <LanguageSwitcher lang={lang} labels={content.switcher} localizedPaths={localizedPaths} />
-          <Link className="header-cta" href={contactAnchor}>
+          {/* <Link className="header-cta" href={contactAnchor}>
             <span className="header-cta__plus">+</span>
             <span className="header-cta__label">{content.cta}</span>
-          </Link>
+          </Link> */}
         </div>
       </div>
     </header>
@@ -195,13 +194,13 @@ function ContactLayout({ content }) {
   return (
     <section className="section">
       <div className="container contact-layout">
-        <div className="contact-layout__intro" data-animate="fade-up">
+        {/* <div className="contact-layout__intro" data-animate="fade-up">
           <h2>{content.contactAsideTitle}</h2>
           <p>{content.contactAsideText}</p>
-        </div>
-        <div data-animate="fade-up">
+        </div> */}
+        {/* <div data-animate="fade-up">
           <ContactForm labels={content.form} />
-        </div>
+        </div> */}
       </div>
     </section>
   );
@@ -210,12 +209,12 @@ function ContactLayout({ content }) {
 function HomeContactSection({ content }) {
   return (
     <section className="section section--contact-home" id="contact">
-      <div className="container">
+      {/* <div className="container">
         <div className="section__narrow" data-animate="fade-up">
           <h2 className="section-title">{content.contactTitle}</h2>
           <p className="page-hero__intro page-hero__intro--home">{content.contactIntro}</p>
         </div>
-      </div>
+      </div> */}
       <ContactLayout content={content} />
     </section>
   );
